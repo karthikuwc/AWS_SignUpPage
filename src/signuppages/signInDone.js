@@ -9,7 +9,6 @@ import Tick from "assets/img/resources/page-1-tick.svg"
 import Logo from "assets/img/resources/page-1.svg";
 import Cross from "assets/img/resources/cross.svg";
 
-import Cryptr from "cryptr"
 
 import "styles/signuppage.css";
 
@@ -48,15 +47,13 @@ class SignInDone extends React.Component {
     // }
     
     handleSubmit(event) {
-      var cryptr = new Cryptr("GlidespotSecret");
-      var nameemail = cryptr.decrypt(this.props.match.params.userid).split(",");
-      console.log("Update "+nameemail[1]+" "+this.state.name);
+
       var obj = {
         UserPoolId: "ap-southeast-1_TB9GVW9nj",
         ClientId: "2a57aiojrldeloo774oritg30i",
         Name: this.state.fullName,
         password: this.state.password,
-        Email: nameemail[1]
+        Email: this.props.location.state.email //nameemail[1]
       }
       
         update(obj, this.updateCallback, this);
@@ -74,6 +71,9 @@ class SignInDone extends React.Component {
             colorbox:"#dbf2ed"
           }
         });
+        console.log("before " + this.props.location.state.name);
+        this.props.location.state.name = this.state.fullName;
+        console.log("after " + this.props.location.state.name);
       }
       else {
         this.setState({
@@ -102,14 +102,14 @@ class SignInDone extends React.Component {
     render() {
     
         console.log("Rendering Sign Up Container");
-        
+        console.log(this.props.location.state);
         document.body.style.backgroundColor = "#ecf7f5";
-        var userid;
-        if(this.state.err.vis == "visible") {
-          var cryptr = new Cryptr("GlidespotSecret");
-          userid = cryptr.encrypt(this.state.fullName+","+this.state.emailAddress);
-        }
-        else {userid = this.props.match.params.userid}
+        // var userid;
+        // if(this.state.err.vis == "visible") {
+        //   // var cryptr = new Cryptr("GlidespotSecret");
+        //   // userid = cryptr.encrypt(this.state.fullName+","+this.state.emailAddress);
+        // }
+        // else {userid = this.props.match.params.userid}
 
         
         // if (this.state.redirect === true) {
@@ -127,7 +127,7 @@ class SignInDone extends React.Component {
                   <a className="navbar-brand nav navbar-nav" href="#" id="navbar">GlideSpot Account</a>
                   <div className="navbar-collapse collapse">
                     <ul className="nav navbar-nav navbar-right">
-                      <li><Link to={"/d/"+userid+"/router1"}><img src={Cross} className="cross"/></Link></li> 
+                      <li><Link to={{pathname: "/d/router1", state:this.props.location.state}}><img src={Cross} className="cross"/></Link></li> 
                     </ul>
                   </div>
                 </nav>

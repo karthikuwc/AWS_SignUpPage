@@ -30,28 +30,28 @@ const dashboardRoutes = [
   //   component: DashboardPage,
   // },
   {
-    path: "/d/:userid/router1",
+    path: "/d/router1",
     sidebarName: "L-Router1",
     navbarName: "Profile",
     icon: Person,
     component: DashboardPage
   },
   {
-    path: "/d/:userid/router2",
+    path: "/d/router2",
     sidebarName: "L-Router2",
     navbarName: "Table List",
     icon: "content_paste",
-    component: DashboardPage
+    component: DashboardLayout
   },
   {
-    path: "/d/:userid/router3",
+    path: "/d/router3",
     sidebarName: "L-Router3",
     navbarName: "Typography",
     icon: LibraryBooks,
     component: DashboardPage
   },
   {
-    path: "/d/:userid/router4",
+    path: "/d/router4",
     sidebarName: "L-Router4",
     navbarName: "Icons",
     icon: BubbleChart,
@@ -78,7 +78,7 @@ const dashboardRoutes = [
   //   icon: Unarchive,
   //   component: UpgradeToPro
   // },
-  { redirect: true, path: "/d/:userid", to: "/d/:userid/router1", navbarName: "Redirect" } //
+  { redirect: true, path: "/d", to: "/d/router1", navbarName: "Redirect" } //
 ];
 
 export default dashboardRoutes;

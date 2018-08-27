@@ -6,8 +6,8 @@ import SignInDone from "signuppages/signInDone";
 const indexRoutes = [
         { path: "/", component: Home, exact: true}, 
         { path: "/signin", component: SignIn },
-        { path: "/d/:userid", component: Dashboard},
-        { path: "/:userid/signindone", component:SignInDone}
+        { path: "/d", component: Dashboard},
+        { path: "/f/signindone", component:SignInDone}
     ];
 
 export default indexRoutes;

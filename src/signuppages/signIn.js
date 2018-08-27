@@ -12,8 +12,6 @@ import Envelope from "assets/img/resources/page-1-envelope.svg";
 import Key from "assets/img/resources/key-icon.svg";
 import Mobile from "assets/img/resources/page-1-mobile.svg";
 
-import Cryptr from "cryptr"
-
 
 import "styles/signuppage.css";
 
@@ -166,10 +164,8 @@ class SignIn extends React.Component {
         
         if (this.state.redirect === true) {
           console.log('redirecting...to sign in done');
-          var cryptr = new Cryptr("GlidespotSecret");
-          var userid = cryptr.encrypt(this.state.name+","+this.state.emailAddress);
           console.log(this.state.name+","+this.state.emailAddress);
-          return (<Redirect to={'/d/'+userid} />)
+          return (<Redirect to={{pathname: '/d', state: {email: this.state.emailAddress, name: this.state.name}}} />)
         }
         
         document.body.style.backgroundColor = "#3e8370";

@@ -31,13 +31,13 @@ const Sidebar = ({ ...props }) => {
   function activeRoute(routeName) {
     return props.location.pathname.indexOf(routeName) > -1 ? true : false;
   }
-  const { classes, color, logo, image, logoText, routes, userid, subroutes } = props;
+  const { classes, color, logo, image, logoText, routes, userid, subroutes, state } = props;
   console.log("hiiiii "+userid);
   var links = (
     <List className={classes.list}>
       {routes.map((prop, key) => {
-        var pathbits = prop.path.split("/");
-        var path = "/d/"+userid+"/"+pathbits[3];
+        // var pathbits = prop.path.split("/");
+        var path = prop.path;
         if (prop.redirect) return null;
         var activePro = " ";
         var listItemClasses;
@@ -57,7 +57,7 @@ const Sidebar = ({ ...props }) => {
         console.log("path "+path);
         return (
           <NavLink
-            to={path}
+            to={{pathname: path, state: state}}
             className={activePro + classes.item}
             activeClassName="active"
             key={key}
@@ -78,7 +78,7 @@ const Sidebar = ({ ...props }) => {
             {activeRoute(path) ? (
             <div>
               {subroutes.map((prop, key) => {
-                var subpath = path +"/"+ prop.path;
+                var subpath = path + prop.path;
                 console.log("subpath "+subpath);
                 var sublistItemClasses;
                 if (prop.path === "/upgrade-to-pro") {
@@ -97,7 +97,7 @@ const Sidebar = ({ ...props }) => {
                 const img = {"Head": Head, "Device": Computer, "Squares": Squares, "Wifi": Wifi}
                 return(
                   <NavLink
-                    to={subpath}
+                    to={{pathname: subpath, state: state}}
                     className={activePro + classes.item}
                     activeClassName="active"
                     key={key}
@@ -127,7 +127,7 @@ const Sidebar = ({ ...props }) => {
   var brand = (
     <div className={classes.logo}>
       <a className={classes.logoLink}>
-        <Link to={"/"+userid+"/signindone"} >
+        <Link to={{pathname:"/f/signindone", state:state}} >
         <div className={classes.logoImage}>
           <img src={logo} alt="logo" className={classes.img} />
         </div>

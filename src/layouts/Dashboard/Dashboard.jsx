@@ -20,7 +20,27 @@ import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboar
 import image from "assets/img/sidebar-2.jpg";
 import logo from "assets/img/glidespot/user.svg"; //
 
-import Cryptr from "cryptr"//
+
+function routeGenerate(dash, sub, comp) {
+  const allroutes = [];
+  dash.map((prop, key) => {
+    if (prop.redirect) {
+      allroutes.push(<Redirect from={prop.path} to={{pathname: prop.to, state: comp.props.location.state}} key={key} />);
+    }
+    else {
+      const Component = prop.component;
+      console.log("Router: "+prop.path);
+      allroutes.push (<Route path={prop.path} render={(props)=><Component {...props}/>} key={key} />);
+      
+      sub.map((propc, keyc) => {
+        const Component = propc.component;
+        console.log("Router: "+prop.path+propc.path);
+        allroutes.push (<Route path={prop.path+propc.path} render={(props)=><Component {...props}/>} key={key} />);
+      })
+    }
+  })
+  return allroutes;
+}
 
 
 
@@ -36,7 +56,7 @@ class App extends React.Component {
     this.setState({ mobileOpen: !this.state.mobileOpen });
   };
   getRoute() {
-    return this.props.location.pathname !== "/d/:userid/maps";//
+    return this.props.location.pathname !== "/d/maps";//
   }
   resizeFunction() {
     if (window.innerWidth >= 960) {
@@ -64,39 +84,37 @@ class App extends React.Component {
     
     const switchRoutes = (
       <Switch>
-        {dashboardRoutes.map((prop, key) => {
+        {/*dashboardRoutes.map((prop, key) => {
           if (prop.redirect)
             return <Redirect from={prop.path} to={prop.to} key={key} />;
           const Component = prop.component;
+          console.log("Router: "+prop.path);
           return (
-          <Route path={prop.path} render={(props)=><Component {...props}/>} key={key} >
-            {subListRoutes.map((propc, keyc) => {
-              const Component = propc.component;
-              console.log("sublinst "+propc.path);
-              return (<Route path={propc.path} render={(props)=><Component {...props}/>} key={keyc} />)//
-            })}
-          </Route>)//
-        })}
+          <Route path={prop.path} render={(props)=><Component {...props}/>} key={key} />)//
+        })*/ routeGenerate(dashboardRoutes, subListRoutes, this)}}
       </Switch>
     );
     
     document.body.style.backgroundColor = "#fff"
+    
+    console.log("State");
+    console.log(this.props.location.state);
+    
     const { classes, ...rest } = this.props;
-    var cryptr = new Cryptr("GlidespotSecret")
-    var nameemail = cryptr.decrypt(this.props.match.params.userid).split(",");
-    console.log(nameemail);
+
     return (
       <div className={classes.wrapper}>
         <Sidebar
           routes={dashboardRoutes}
           subroutes={subListRoutes}
-          logoText={nameemail[0]} //
+          logoText={ this.props.location.state.name} //
           logo={logo}
           image={""}
           handleDrawerToggle={this.handleDrawerToggle}
           open={this.state.mobileOpen}
           color="greeen" //
           userid={this.props.match.params.userid}
+          state={this.props.location.state}
           {...rest}
         />
         <div className={classes.mainPanel} ref="mainPanel">
@@ -104,7 +122,7 @@ class App extends React.Component {
             routes={dashboardRoutes}
             handleDrawerToggle={this.handleDrawerToggle}
             userid={this.props.match.params.userid}
-            email={nameemail[1]}
+            email={this.props.location.state.email}
             {...rest}
           />
           {/* On the /maps route we want the map to be on full screen - this is not possible if the content and conatiner classes are present because they have some paddings which would make the map smaller */}
